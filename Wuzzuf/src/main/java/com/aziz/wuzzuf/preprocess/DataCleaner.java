@@ -27,5 +27,9 @@ public class DataCleaner {
         return df.filter(row -> !row.anyNull());
     }
 
+    public static Dataset<Row> removeDuplicates(SparkSession session, Dataset<Row> df){
+        return df.distinct();
+    }
+
 
 }

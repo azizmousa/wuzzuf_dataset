@@ -1,6 +1,7 @@
 package com.aziz.wuzzuf;
 
 import com.aziz.wuzzuf.model.MainModel;
+import com.aziz.wuzzuf.preprocess.DataCleaner;
 import com.aziz.wuzzuf.preprocess.FileLoader;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
@@ -74,4 +75,15 @@ public class MainController {
         return builder.toString();
     }
 
+
+    @RequestMapping("count-null")
+    public String countNull(){
+        return DataCleaner.getNullCount(MainModel.getSession(), MainModel.getMainDataframe());
+    }
+
+    @RequestMapping("drop-null")
+    public String dropNulls(){
+        MainModel.setMainDataframe(DataCleaner.dropNulls(MainModel.getSession(), MainModel.getMainDataframe()));
+        return countNull();
+    }
 }

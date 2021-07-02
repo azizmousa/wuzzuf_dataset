@@ -86,4 +86,10 @@ public class MainController {
         MainModel.setMainDataframe(DataCleaner.dropNulls(MainModel.getSession(), MainModel.getMainDataframe()));
         return countNull();
     }
+
+    @RequestMapping("remove-dup")
+    public String removeDuplicates(){
+        MainModel.setMainDataframe(DataCleaner.removeDuplicates(MainModel.getSession(), MainModel.getMainDataframe()));
+        return displaySummary();
+    }
 }

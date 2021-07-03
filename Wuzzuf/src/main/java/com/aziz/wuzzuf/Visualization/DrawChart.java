@@ -1,21 +1,20 @@
 package com.aziz.wuzzuf.Visualization;
 
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.knowm.xchart.*;
-import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.style.Styler;
-import org.knowm.xchart.style.markers.SeriesMarkers;
 
-import org.knowm.xchart.style.markers.SeriesMarkers;
 import java.io.IOException;
-import java.util.*;
-import java.lang.Integer;
+import java.util.Arrays;
+import java.util.Iterator;
+
 public class DrawChart {
 
-    public static String drawPieChart(){
+    public static String drawPieChart(Dataset<Row> dataset){
         PieChart chart = new PieChartBuilder().width(800).height(600).title("jobs for each company").build();
-        //Todo iterate over real data
-        for(int i=1 ; i < 10 ; i++) {
-            chart.addSeries("i : "+String.format("%d", i), i*i);
+        for (Iterator<Row> it = dataset.toLocalIterator(); it.hasNext(); ) {
+            Row row = it.next();
+            chart.addSeries(row.getString(0), Integer.parseInt(row.getString(1)));
         }
         String imageNameAndPath = "/images/jobs_PieChart.png";
         try {
@@ -27,7 +26,7 @@ public class DrawChart {
         return imageNameAndPath;
     }
 
-    public static String drawBarChart(){
+    public static String drawBarChart(Dataset<Row> dataset){
 
         CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Popular Areas Histogram").xAxisTitle("Popular Areas").yAxisTitle("Count").build();
         // Customize Chart
@@ -36,7 +35,11 @@ public class DrawChart {
 
         // Series
         //todo real data
-        chart.addSeries("test 1", Arrays.asList(new Integer[] { 0, 1, 2, 3, 4 }), Arrays.asList(new Integer[] { 4, 5, 9, 6, 5 }));
+        for (Iterator<Row> it = dataset.toLocalIterator(); it.hasNext(); ) {
+            Row row = it.next();
+            chart.addSeries(row.getString(0),Arrays.asList(new Integer[] { 0, 1, 2, 3, 4 }), Arrays.asList(new Integer[] { 4, 5, 9, 6, 5 }));
+
+        }
 
         String imageNameAndPath = "/images/areas_BarChart.png";
         try {

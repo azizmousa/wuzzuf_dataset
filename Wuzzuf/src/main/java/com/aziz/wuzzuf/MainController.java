@@ -1,22 +1,22 @@
 package com.aziz.wuzzuf;
 
+import com.aziz.wuzzuf.Visualization.DrawChart;
 import com.aziz.wuzzuf.model.MainModel;
 import com.aziz.wuzzuf.preprocess.FileLoader;
 import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.types.IntegerType;
+import org.apache.spark.sql.types.StructType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
+import java.awt.*;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import com.aziz.wuzzuf.Visualization.DrawChart;
-import org.springframework.web.servlet.ModelAndView;
+
 @RestController
 public class MainController {
 
@@ -75,24 +75,35 @@ public class MainController {
         return builder.toString();
     }
     @RequestMapping("/pieChart")
-    public ModelAndView  displayPieChart(){
-        ModelAndView modelAndView = new ModelAndView();
+    public StringBuilder  displayPieChart(){
+       // ModelAndView modelAndView = new ModelAndView();
         //TODO please make a drawPieChart with parameters
-        String filePath = DrawChart.drawPieChart();
+//        modelAndView.setViewName("pie_chart");
+//        modelAndView.addObject("pieChartPath",filePath);
+        //return modelAndView;
+        Dataset<Row> dataset = new Dataset<Row>();
+        String filePath = DrawChart.drawPieChart(dataset);
         System.out.println(filePath);
-        modelAndView.setViewName("pie_chart");
-        modelAndView.addObject("pieChartPath",filePath);
-        return modelAndView;
+        StringBuilder builder = new StringBuilder();
+        builder.append("<h1>Jobs Pie Chart</h1>");
+        builder.append("<img src='").append(filePath).append("'/>");
+        return builder;
+
     }
 
     @RequestMapping("/barChart")
-    public ModelAndView  displayBarChart(){
-        ModelAndView modelAndView = new ModelAndView();
+    public StringBuilder  displayBarChart(){
+      //  ModelAndView modelAndView = new ModelAndView();
         //TODO please make a drawBarChart with parameters
-        String filePath = DrawChart.drawBarChart();
+        Dataset<Row> dataset = new Dataset<Row>();
+        String filePath = DrawChart.drawBarChart(dataset);
         System.out.println(filePath);
-        modelAndView.setViewName("bar_chart");
-        modelAndView.addObject("barChartPath",filePath);
-        return modelAndView;
+        StringBuilder builder = new StringBuilder();
+        builder.append("<h1>Areas Bar Chart</h1>");
+        builder.append("<img src='").append(filePath).append("'/>");
+        return builder;
+//        modelAndView.setViewName("bar_chart");
+//        modelAndView.addObject("barChartPath",filePath);
+//        return modelAndView;
     }
 }

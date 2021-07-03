@@ -9,8 +9,13 @@ public class DataInfo {
     public static Dataset<Row> getMostDemandCompany(SparkSession session, Dataset<Row> df){
         df.createOrReplaceTempView("wuzzuf");
         String sql = "select Company, count(Title) as jobs from wuzzuf  group by Company order by jobs";
-        Dataset<Row> dataset = session.sql(sql);
-        return dataset;
+        return session.sql(sql);
+    }
+
+    public static Dataset<Row> getMostPopularJobTitle(SparkSession session, Dataset<Row> df){
+        df.createOrReplaceTempView("wuzzuf");
+        String sql = "select Title, count(Title) as jobs from wuzzuf  group by Title order by jobs desc";
+        return session.sql(sql);
     }
 
 }

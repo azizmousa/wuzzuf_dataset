@@ -1,42 +1,50 @@
 package com.aziz.wuzzuf.Visualization;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.knowm.xchart.*;
+import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.style.Styler;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import org.knowm.xchart.style.markers.SeriesMarkers;
-import java.awt.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
-
+import java.util.*;
+import java.lang.Integer;
 public class DrawChart {
-//src/main/resources/Wuzzuf_Jobs.csv file path
-    public static String drawPieChart(){
 
+    public static String drawPieChart(){
         PieChart chart = new PieChartBuilder().width(800).height(600).title("jobs for each company").build();
-        // Series
+        //Todo iterate over real data
         for(int i=1 ; i < 10 ; i++) {
             chart.addSeries("i : "+String.format("%d", i), i*i);
         }
+        String imageNameAndPath = "/images/jobs_PieChart.png";
         try {
-            BitmapEncoder.saveBitmap(chart, "./Sample_PieChart",BitmapEncoder.BitmapFormat.PNG);
+            BitmapEncoder.saveBitmap(chart, "./src/main/resources/static"+imageNameAndPath,BitmapEncoder.BitmapFormat.PNG);
+            System.out.println("./src/main/resources/static"+imageNameAndPath);
         } catch (IOException e) {
-            System.out.println("Can't create image"); // Or something more intellegent
+            e.printStackTrace(); // Or something more intellegent
         }
-        return "./Sample_PieChart";
+        return imageNameAndPath;
+    }
+
+    public static String drawBarChart(){
+
+        CategoryChart chart = new CategoryChartBuilder().width(800).height(600).title("Popular Areas Histogram").xAxisTitle("Popular Areas").yAxisTitle("Count").build();
+        // Customize Chart
+        //chart.getStyler().setLegendPosition(LegendPosition.InsideNW);
+        chart.getStyler().setHasAnnotations(true);
+
+        // Series
+        //todo real data
+        chart.addSeries("test 1", Arrays.asList(new Integer[] { 0, 1, 2, 3, 4 }), Arrays.asList(new Integer[] { 4, 5, 9, 6, 5 }));
+
+        String imageNameAndPath = "/images/areas_BarChart.png";
+        try {
+            BitmapEncoder.saveBitmap(chart,"./src/main/resources/static"+imageNameAndPath,BitmapEncoder.BitmapFormat.PNG);
+        } catch (IOException e) {
+            e.printStackTrace(); // Or something more intellegent
+        }
+        return imageNameAndPath;
     }
 
 }

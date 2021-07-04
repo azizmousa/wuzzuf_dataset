@@ -1,21 +1,24 @@
 package com.aziz.wuzzuf;
 
+import com.aziz.wuzzuf.Visualization.DrawChart;
+import com.aziz.wuzzuf.info.DataInfo;
 import com.aziz.wuzzuf.model.MainModel;
 import com.aziz.wuzzuf.preprocess.DataCleaner;
 import com.aziz.wuzzuf.preprocess.FileLoader;
 import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.types.IntegerType;
+import org.apache.spark.sql.types.StructType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
+import java.awt.*;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.ResourceBundle;
 
 @RestController
 public class MainController {
@@ -73,6 +76,24 @@ public class MainController {
             builder.append("<br>").append(js).append("</br>");
         }
         return builder.toString();
+    }
+
+
+    @RequestMapping("/most-demanded-jobs-pie")
+    public String mostDemandJobsPie(){
+        String imageByte = DrawChart.drawPieChart(DataInfo.getMostDemandCompany(MainModel.getSession(),
+                MainModel.getMainDataframe()));
+        return "<img id=\"profileImage\" src=\"data:image/jpg;base64, "+imageByte+"\">";
+    }
+
+    @RequestMapping("/most-jobs-title-bar")
+    public String mostPopularJobsTitlesBar(){
+        String imageByte = DrawChart.drawBarChart(DataInfo.getMostPopularJobTitle(MainModel.getSession(),
+                MainModel.getMainDataframe()));
+        System.out.println(WuzzufApplication.class.getResource("./../../.."));
+//        return "<img src=\"" +  imagePath+".jpg" + "\" width=\"800\" height=\"500\">";
+        return "<img id=\"profileImage\" src=\"data:image/jpg;base64, "+imageByte+"\">";
+
     }
 
 

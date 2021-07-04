@@ -82,17 +82,23 @@ public class MainController {
     @RequestMapping("/most-demanded-jobs-pie")
     public String mostDemandJobsPie(){
         String imageByte = DrawChart.drawPieChart(DataInfo.getMostDemandCompany(MainModel.getSession(),
-                MainModel.getMainDataframe()));
-        return "<img id=\"profileImage\" src=\"data:image/jpg;base64, "+imageByte+"\">";
+                MainModel.getMainDataframe()), "Most Demanded Jobs");
+        return "<img src=\"data:image/jpg;base64, "+imageByte+"\">";
     }
 
     @RequestMapping("/most-jobs-title-bar")
     public String mostPopularJobsTitlesBar(){
         String imageByte = DrawChart.drawBarChart(DataInfo.getMostPopularJobTitle(MainModel.getSession(),
-                MainModel.getMainDataframe()));
-        System.out.println(WuzzufApplication.class.getResource("./../../.."));
-//        return "<img src=\"" +  imagePath+".jpg" + "\" width=\"800\" height=\"500\">";
-        return "<img id=\"profileImage\" src=\"data:image/jpg;base64, "+imageByte+"\">";
+                MainModel.getMainDataframe()), "Most Popular Jobs titles");
+        return "<img src=\"data:image/jpg;base64, "+imageByte+"\">";
+
+    }
+
+    @RequestMapping("/most-pop-areas-bar")
+    public String mostPopularAreasBar(){
+        String imageByte = DrawChart.drawBarChart(DataInfo.getMostPopularAreas(MainModel.getSession(),
+                MainModel.getMainDataframe()), "Most Popular Areas");
+        return "<img src=\"data:image/jpg;base64, "+imageByte+"\">";
 
     }
 

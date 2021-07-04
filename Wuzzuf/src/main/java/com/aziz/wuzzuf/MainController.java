@@ -1,6 +1,7 @@
 package com.aziz.wuzzuf;
 
 import com.aziz.wuzzuf.Visualization.DrawChart;
+import com.aziz.wuzzuf.info.DataInfo;
 import com.aziz.wuzzuf.model.MainModel;
 import com.aziz.wuzzuf.preprocess.DataCleaner;
 import com.aziz.wuzzuf.preprocess.FileLoader;
@@ -17,6 +18,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 @RestController
 public class MainController {
@@ -75,38 +77,25 @@ public class MainController {
         }
         return builder.toString();
     }
-    @RequestMapping("/pieChart")
-    public StringBuilder  displayPieChart(){
-       // ModelAndView modelAndView = new ModelAndView();
-        //TODO please make a drawPieChart with parameters
-//        modelAndView.setViewName("pie_chart");
-//        modelAndView.addObject("pieChartPath",filePath);
-        //return modelAndView;
-        Dataset<Row> dataset = new Dataset<Row>();
-        String filePath = DrawChart.drawPieChart(dataset);
-        System.out.println(filePath);
-        StringBuilder builder = new StringBuilder();
-        builder.append("<h1>Jobs Pie Chart</h1>");
-        builder.append("<img src='").append(filePath).append("'/>");
-        return builder;
+
+
+    @RequestMapping("/most-demanded-jobs-pie")
+    public String mostDemandJobsPie(){
+        String imageByte = DrawChart.drawPieChart(DataInfo.getMostDemandCompany(MainModel.getSession(),
+                MainModel.getMainDataframe()));
+        return "<img id=\"profileImage\" src=\"data:image/jpg;base64, "+imageByte+"\">";
+    }
+
+    @RequestMapping("/most-jobs-title-bar")
+    public String mostPopularJobsTitlesBar(){
+        String imageByte = DrawChart.drawBarChart(DataInfo.getMostPopularJobTitle(MainModel.getSession(),
+                MainModel.getMainDataframe()));
+        System.out.println(WuzzufApplication.class.getResource("./../../.."));
+//        return "<img src=\"" +  imagePath+".jpg" + "\" width=\"800\" height=\"500\">";
+        return "<img id=\"profileImage\" src=\"data:image/jpg;base64, "+imageByte+"\">";
 
     }
 
-    @RequestMapping("/barChart")
-    public StringBuilder  displayBarChart() {
-        //  ModelAndView modelAndView = new ModelAndView();
-        //TODO please make a drawBarChart with parameters
-        Dataset<Row> dataset = new Dataset<Row>();
-        String filePath = DrawChart.drawBarChart(dataset);
-        System.out.println(filePath);
-        StringBuilder builder = new StringBuilder();
-        builder.append("<h1>Areas Bar Chart</h1>");
-        builder.append("<img src='").append(filePath).append("'/>");
-        return builder;
-//        modelAndView.setViewName("bar_chart");
-//        modelAndView.addObject("barChartPath",filePath);
-//        return modelAndView;
-    }
 
     @RequestMapping("count-null")
     public String countNull(){

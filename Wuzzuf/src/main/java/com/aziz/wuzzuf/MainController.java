@@ -2,6 +2,7 @@ package com.aziz.wuzzuf;
 
 import com.aziz.wuzzuf.Visualization.DrawChart;
 import com.aziz.wuzzuf.model.MainModel;
+import com.aziz.wuzzuf.preprocess.DataCleaner;
 import com.aziz.wuzzuf.preprocess.FileLoader;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -92,8 +93,8 @@ public class MainController {
     }
 
     @RequestMapping("/barChart")
-    public StringBuilder  displayBarChart(){
-      //  ModelAndView modelAndView = new ModelAndView();
+    public StringBuilder  displayBarChart() {
+        //  ModelAndView modelAndView = new ModelAndView();
         //TODO please make a drawBarChart with parameters
         Dataset<Row> dataset = new Dataset<Row>();
         String filePath = DrawChart.drawBarChart(dataset);
@@ -105,5 +106,22 @@ public class MainController {
 //        modelAndView.setViewName("bar_chart");
 //        modelAndView.addObject("barChartPath",filePath);
 //        return modelAndView;
+    }
+
+    @RequestMapping("count-null")
+    public String countNull(){
+        return DataCleaner.getNullCount(MainModel.getSession(), MainModel.getMainDataframe());
+    }
+
+    @RequestMapping("drop-null")
+    public String dropNulls(){
+        MainModel.setMainDataframe(DataCleaner.dropNulls(MainModel.getSession(), MainModel.getMainDataframe()));
+        return countNull();
+    }
+
+    @RequestMapping("remove-dup")
+    public String removeDuplicates(){
+        MainModel.setMainDataframe(DataCleaner.removeDuplicates(MainModel.getSession(), MainModel.getMainDataframe()));
+        return displaySummary();
     }
 }

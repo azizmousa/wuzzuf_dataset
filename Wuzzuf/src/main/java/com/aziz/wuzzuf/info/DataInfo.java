@@ -53,5 +53,4 @@ public class DataInfo {
         skillsDf = session.sql(skillsSQL);
         return skillsDf;
     }
-    
 }

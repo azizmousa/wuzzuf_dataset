@@ -102,6 +102,13 @@ public class MainController {
 
     }
 
+    @RequestMapping("/most-pop-skills-bar")
+    public String mostPopularSkillsBar(){
+        String imageByte = DrawChart.drawBarChart(DataInfo.getMostPopularSills(MainModel.getSession(),
+                MainModel.getMainDataframe()), "Most Popular Areas");
+        return "<img src=\"data:image/jpg;base64, "+imageByte+"\">";
+
+    }
 
     @RequestMapping("count-null")
     public String countNull(){

@@ -18,7 +18,6 @@ public class DataCleaner {
         for (String col : df.columns()) {
             builder.append("<br>").append("<b>").append(col).append(": </b>").append(cols.get(count++)).append("</br>");
         }
-        builder.insert(0, "<h1>Number Of nulls in wuzzuf dataset:</h1>");
         return builder.toString();
     }
 

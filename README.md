@@ -1,9 +1,9 @@
-#Introduction:
+# Introduction:
 ---------------------------------
 this application is java web applicatoin that use spark library to work with wuzzuf dataset and do some operations on it.
 
 
-#Instructions:
+# Instructions:
 ---------------------------------
 - To use this application load the application and run it on application server prefared "APACHE TOMCAT"
 - use intellij ide to load the project and run it
@@ -11,7 +11,7 @@ this application is java web applicatoin that use spark library to work with wuz
 - folow links to apply specific operation
 
 
-#API Documentation:
+# API Documentation:
 ----------------------------------
 - To load csv dataset : "http://localhost:8080/load-csv?path=[dataset-path]&header=[is_header?]"
 	- Default dataset: http://localhost:8080/load-csv?path=src/main/resources/Wuzzuf_Jobs.csv&header=true

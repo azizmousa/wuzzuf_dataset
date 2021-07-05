@@ -5,13 +5,8 @@ import org.apache.spark.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.spark.sql.functions;
-import org.apache.spark.sql.types.IntegerType;
-import org.apache.spark.sql.types.StringType;
-import org.spark_project.dmg.pmml.DataType;
-import scala.collection.JavaConverters;
-import scala.collection.Seq;
-import scala.reflect.api.TypeTags;
+import tech.tablesaw.api.StringColumn;
+import tech.tablesaw.api.Table;
 
 public class DataInfo {
 
@@ -52,5 +47,32 @@ public class DataInfo {
                 "group by Skills order by skCount desc";
         skillsDf = session.sql(skillsSQL);
         return skillsDf;
+    }
+
+    public static Table convertExp(Table table){
+        StringColumn yearsExp = table.stringColumn("YearsExp");
+        List<String> minYearList = new ArrayList<>();
+        List<String> maxYearList = new ArrayList<>();
+        for(String row : yearsExp){
+            String rowCleaned = row.replace("Yrs of Exp", "")
+                    .replace(" ", "");
+            String [] splits = new String[]{"0", "0"};
+            if(rowCleaned.contains("-"))
+                splits = rowCleaned.split("-");
+            else if (rowCleaned.contains("+")) {
+                splits[0] = rowCleaned.replace("+", "");
+                splits[1] = "inf";
+            } else{
+                splits[1] = "inf";
+            }
+            minYearList.add(splits[0]);
+            maxYearList.add(splits[1]);
+        }
+        StringColumn minCol = StringColumn.create("minExp", minYearList);
+        StringColumn maxCol = StringColumn.create("maxExp", maxYearList);
+
+        table.addColumns(minCol);
+        table.addColumns(maxCol);
+        return table;
     }
 }

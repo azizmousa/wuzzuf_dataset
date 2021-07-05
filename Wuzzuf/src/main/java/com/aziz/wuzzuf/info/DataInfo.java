@@ -49,7 +49,8 @@ public class DataInfo {
         return skillsDf;
     }
 
-    public static Table convertExp(Table table){
+    public static Table convertExp(Table inp){
+        Table table = Table.create(inp.columns());
         StringColumn yearsExp = table.stringColumn("YearsExp");
         List<String> minYearList = new ArrayList<>();
         List<String> maxYearList = new ArrayList<>();

@@ -34,6 +34,8 @@ this application is java web applicatoin that use spark library to work with wuz
 
 - To Draw Most Popular Skills Bar Chart: http://localhost:8080/most-pop-skills-bar
 
+- To Factorize YearsExp: http://localhost:8080/convert-years-exp
+
 - To Run pipline and run all previouse operations : http://localhost:8080/pip-line?path=[dataset-path]&header=[is_header?]
 	- Default dataset: http://localhost:8080/pip-line?path=src/main/resources/Wuzzuf_Jobs.csv&header=true
 

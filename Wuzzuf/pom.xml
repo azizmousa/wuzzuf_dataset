@@ -93,6 +93,14 @@
             <version>3.0.8</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/tech.tablesaw/tablesaw-core -->
+        <dependency>
+            <groupId>tech.tablesaw</groupId>
+            <artifactId>tablesaw-core</artifactId>
+            <version>0.38.2</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

@@ -10,6 +10,8 @@ import org.apache.spark.sql.Row;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tech.tablesaw.api.Table;
+
 import java.util.Iterator;
 
 @RestController
@@ -45,6 +47,9 @@ public class MainController {
         builder.append("<br><a href=http://localhost:8080/most-pop-skills-bar>Draw Most Popular Skills</a> ==> " +
                 "<b>http://localhost:8080/most-pop-skills-bar</b>");
 
+        builder.append("<br><a href=http://localhost:8080/convert-years-exp>Factorize YearsExp</a> ==> " +
+                "<b>http://localhost:8080/convert-years-exp</b>");
+
         builder.append("<br><a href=http://localhost:8080/pip-line?" +
                 "path=src/main/resources/Wuzzuf_Jobs.csv&header=true>Run pip line</a> ==> " +
                 "<b>http://localhost:8080/pip-line?path=[dataset-path]&header=[is_header?]</b>");
@@ -56,6 +61,14 @@ public class MainController {
                             @RequestParam(value = "header", required = true) String header)  {
         Dataset<Row> df = FileLoader.load_csv(MainModel.getSession(), path, Boolean.parseBoolean(header));
         MainModel.setMainDataframe(df);
+        try {
+            Table table = FileLoader.load_csv_table_saw(path);
+//            System.out.println(table.print());
+            MainModel.setMainTable(table);
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
+
         return "<h1>CSV Loaded:)</h1>";
 
     }
@@ -189,7 +202,54 @@ public class MainController {
         .append(mostDemandJobsPie())
         .append(mostPopularJobsTitlesBar())
         .append(mostPopularAreasBar())
-        .append(mostPopularSkillsBar());
+        .append(mostPopularSkillsBar())
+        .append(convertYearsExp());
         return builder.toString();
     }
+
+    @RequestMapping("convert-years-exp")
+    public String convertYearsExp(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("<h1>Convert YearsExp Column</h1>");
+        Table table = DataInfo.convertExp(MainModel.getMainTable());
+        builder.append("<h1>Dataset</h1>");
+        builder.append("<table style=\"width:100%\">");
+        builder.append(" <tr>")
+                .append("<th>#</th>")
+                .append("<th>Title</th>")
+                .append("<th>Company</th>")
+                .append("<th>Location</th>")
+                .append("<th>Type</th>")
+                .append("<th>Level</th>")
+                .append("<th>YearsEXP</th>")
+                .append("<th>Country</th>")
+                .append("<th>Skills</th>")
+                .append("<th>MinExp</th>")
+                .append("<th>MaxExp</th>")
+                .append("</tr>");
+        int i = 1;
+        for (Iterator<tech.tablesaw.api.Row> it = table.stream().iterator(); it.hasNext(); ) {
+            tech.tablesaw.api.Row row = it.next();
+            builder.append(" <tr>")
+                    .append("<th>").append(i).append("</th>")
+                    .append("<th>").append(row.getString(0)).append("</th>")
+                    .append("<th>").append(row.getString(1)).append("</th>")
+                    .append("<th>").append(row.getString(2)).append("</th>")
+                    .append("<th>").append(row.getString(3)).append("</th>")
+                    .append("<th>").append(row.getString(4)).append("</th>")
+                    .append("<th>").append(row.getString(5)).append("</th>")
+                    .append("<th>").append(row.getString(6)).append("</th>")
+                    .append("<th>").append(row.getString(7)).append("</th>")
+                    .append("<th>").append(row.getString(8)).append("</th>")
+                    .append("<th>").append(row.getString(9)).append("</th>")
+                    .append("</tr>");
+            if(i == 10)
+                break;
+            i++;
+        }
+        builder.append("</table>");
+        return builder.toString();
+    }
+
+
 }
